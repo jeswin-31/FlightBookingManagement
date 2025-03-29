@@ -5,9 +5,15 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 
 dotenv.config();
+const flightRoutes = require('./routes/flightRoutes');
+app.use('/api/flights', flightRoutes);
 
 
 const app = express();
+
+
+const tourRoutes = require('./routes/tourRoutes');
+app.use('/api/tours', tourRoutes);
 
 app.use(cors());
 app.use(express.json());
