@@ -10,6 +10,8 @@ app.use('/api/flights', flightRoutes);
 
 
 const app = express();
+const transactionRoutes = require('./routes/transactionRoutes');
+app.use('/api/transactions', transactionRoutes);
 
 
 const tourRoutes = require('./routes/tourRoutes');
