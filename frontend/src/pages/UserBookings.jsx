@@ -35,27 +35,32 @@ const UserBookings = () => {
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">📋 My Bookings</h2>
       <ul>
-  {bookings.map((b) => (
-    <li key={b._id} className="border p-2 my-2">
-      {b.type === 'flight' ? (
-        <>
-          ✈️ Flight: {b.flightNumber} — Airline: {b.airline} <br />
-          🪑 Seats: {b.seats || 1} — Numbers: {b.seatNumbers?.join(', ') || 'N/A'}
-        </>
-      ) : (
-        <>
-          🌍 Tour: {b.tourTitle}
-        </>
-      )}
-      <button
-        className="ml-4 bg-red-600 text-white px-2 py-1 rounded"
-        onClick={() => handleCancel(b._id)}
-      >
-        Cancel
-      </button>
-    </li>
-  ))}
+  {bookings
+    .filter((b) => b !== null && b !== undefined) // Filter out null/undefined
+    .map((b) => (
+      <li key={b._id} className="border p-2 my-2">
+        {b.type === 'flight' ? (
+          <>
+            ✈️ Flight: {b.flightNumber} — Airline: {b.airline} <br />
+            🪑 Seats: {b.seats || 1} — Numbers: {b.seatNumbers?.join(', ') || 'N/A'}
+          </>
+        ) : b.type === 'tour' ? (
+          <>
+            🌍 Tour: {b.tourTitle}
+          </>
+        ) : (
+          <>❓ Unknown Booking Type</>
+        )}
+        <button
+          className="ml-4 bg-red-600 text-white px-2 py-1 rounded"
+          onClick={() => handleCancel(b._id)}
+        >
+          Cancel
+        </button>
+      </li>
+    ))}
 </ul>
+
 
     </div>
   );

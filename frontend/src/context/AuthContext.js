@@ -13,10 +13,15 @@ export const AuthProvider = ({ children }) => {
   const login = (data) => {
     localStorage.setItem('token', data.token);
     localStorage.setItem('role', data.role);
-    localStorage.setItem('name', data.name);
-    setAuth({ token: data.token, role: data.role, name: data.name });
+    localStorage.setItem('username', data.username);  // ✅ Set username
+    setAuth({
+      token: data.token,
+      role: data.role,
+      user: { username: data.username }  // ✅ Save in state
+    });
     return data.role;
   };
+  
 
   const logout = () => {
     localStorage.clear();
