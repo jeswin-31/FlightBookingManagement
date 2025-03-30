@@ -1,34 +1,30 @@
-
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
 
 dotenv.config();
-const flightRoutes = require('./routes/flightRoutes');
-app.use('/api/flights', flightRoutes);
 
-
+// ✅ INIT APP FIRST
 const app = express();
-const transactionRoutes = require('./routes/transactionRoutes');
-app.use('/api/transactions', transactionRoutes);
 
-
-const tourRoutes = require('./routes/tourRoutes');
-app.use('/api/tours', tourRoutes);
-
+// ✅ MIDDLEWARES
 app.use(cors());
 app.use(express.json());
+
+// ✅ ROUTES
 app.use('/api/auth', require('./routes/authRoutes'));
-//app.use('/api/tasks', require('./routes/taskRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/flights', require('./routes/flightRoutes'));
+app.use('/api/tours', require('./routes/tourRoutes'));
+app.use('/api/transactions', require('./routes/transactionRoutes'));
+app.use('/api/bookings', require('./routes/bookingRoutes')); // ✅ moved here, only once
 
-// Export the app object for testing
+// ✅ START SERVER (if not in test mode)
 if (require.main === module) {
-    connectDB();
-    // If the file is run directly, start the server
-    const PORT = process.env.PORT || 5001;
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  }
+  connectDB();
+  const PORT = process.env.PORT || 5001;
+  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+}
 
-
-module.exports = app
+module.exports = app;
