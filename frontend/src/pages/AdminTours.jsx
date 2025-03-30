@@ -1,30 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosConfig';
 
 const AdminTours = () => {
   const [tours, setTours] = useState([]);
   const [form, setForm] = useState({});
 
   const loadTours = async () => {
-    const res = await axios.get('/api/tours');
-    setTours(res.data);
+    try {
+      const res = await axiosInstance.get('/api/tours');
+      setTours(res.data);
+    } catch (error) {
+      console.error('Failed to load tours:', error);
+    }
   };
 
   useEffect(() => {
     loadTours();
   }, []);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async () => {
-    await axios.post('/api/tours', form);
-    setForm({});
-    loadTours();
+    try {
+      await axiosInstance.post('/api/tours', form);
+      setForm({});
+      loadTours();
+    } catch (error) {
+      console.error('Failed to add tour:', error);
+    }
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`/api/tours/${id}`);
-    loadTours();
+    try {
+      await axiosInstance.delete(`/api/tours/${id}`);
+      loadTours();
+    } catch (error) {
+      console.error('Failed to delete tour:', error);
+    }
   };
 
   return (
@@ -36,7 +50,7 @@ const AdminTours = () => {
       <input name="endDate" type="date" onChange={handleChange} />
       <input name="price" type="number" placeholder="Price" onChange={handleChange} />
       <input name="availableSeats" type="number" placeholder="Seats" onChange={handleChange} />
-      <button className="bg-blue-500 text-white p-2" onClick={handleSubmit}>Add Tour</button>
+      <button className="bg-blue-500 text-white p-2 mt-2" onClick={handleSubmit}>Add Tour</button>
 
       <ul className="mt-4">
         {tours.map((t) => (

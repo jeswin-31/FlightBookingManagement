@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosConfig';
 
 const AdminFlights = () => {
   const [flights, setFlights] = useState([]);
   const [form, setForm] = useState({});
 
   const loadFlights = async () => {
-    const res = await axios.get('/api/flights');
+    const res = await axiosInstance.get('/api/flights');
     setFlights(res.data);
   };
 
@@ -17,13 +17,13 @@ const AdminFlights = () => {
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async () => {
-    await axios.post('/api/flights', form);
+    await axiosInstance.post('/api/flights', form);
     setForm({});
     loadFlights();
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`/api/flights/${id}`);
+    await axiosInstance.delete(`/api/flights/${id}`);
     loadFlights();
   };
 
@@ -39,7 +39,7 @@ const AdminFlights = () => {
       <input name="arrivalTime" type="datetime-local" onChange={handleChange} />
       <input name="price" placeholder="Price" type="number" onChange={handleChange} />
       <input name="seatsAvailable" placeholder="Seats" type="number" onChange={handleChange} />
-      <button className="bg-blue-500 text-white p-2" onClick={handleSubmit}>Add Flight</button>
+      <button className="bg-blue-500 text-white p-2 mt-2" onClick={handleSubmit}>Add Flight</button>
 
       <ul className="mt-4">
         {flights.map((f) => (

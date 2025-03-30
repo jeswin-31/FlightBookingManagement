@@ -8,16 +8,23 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axiosInstance.post('/api/auth/login', formData);
-      login(response.data);
-      navigate('/tasks');
-    } catch (error) {
-      alert('Login failed. Please try again.');
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await axiosInstance.post('/api/auth/login', formData);
+    const role = login(response.data); // role returned from context
+
+    // ✅ Role-based redirection
+    if (role === 'admin') {
+      navigate('/admin/dashboard');
+    } else {
+      navigate('/user/dashboard');
     }
-  };
+  } catch (error) {
+    alert('Login failed. Please try again.');
+  }
+};
+
 
   return (
     <div className="max-w-md mx-auto mt-20">
