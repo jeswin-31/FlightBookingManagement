@@ -1,28 +1,42 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
-    push:
-        branches:
-            - main
-    pull_request:
-        branches:
-            - main
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build-and-test:
+    runs-on: ubuntu-latest
 
-        steps:
-        - name: Checkout code
-            uses: actions/checkout@v2
+    services:
+      mongo:
+        image: mongo
+        ports:
+          - 27017:27017
 
-        - name: Set up Node.js
-            uses: actions/setup-node@v2
-            with:
-                node-version: '14'
+    steps:
+    - name: ⬇️ Checkout code
+      uses: actions/checkout@v3
 
-        - name: Install dependencies
-            run: npm install
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
 
-        - name: Run tests
-            run: npm test
+    - name: 📦 Install backend dependencies
+      run: npm install
+      working-directory: ./backend
+
+    - name: 🧪 Run backend tests (if any)
+      run: npm test
+      working-directory: ./backend
+
+    - name: 📦 Install frontend dependencies
+      run: npm install
+      working-directory: ./frontend
+
+    - name: ⚙️ Build frontend
+      run: npm run build
+      working-directory: ./frontend
